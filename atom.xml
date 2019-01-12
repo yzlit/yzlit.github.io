@@ -3,11 +3,11 @@
   <title>酒夜狸个人博客</title>
   
   <subtitle>酒夜狸的个人博客，欢迎探讨有关java,python,go,linux后台技术，诗歌，科幻，人生。</subtitle>
-  <link href="/yzlit/atom.xml" rel="self"/>
+  <link href="/atom.xml" rel="self"/>
   
-  <link href="https://yzlit.github.io/yzlit/"/>
+  <link href="https://yzlit.github.io/"/>
   <updated>2019-01-12T06:32:42.986Z</updated>
-  <id>https://yzlit.github.io/yzlit/</id>
+  <id>https://yzlit.github.io/</id>
   
   <author>
     <name>酒夜狸</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>测试</title>
-    <link href="https://yzlit.github.io/yzlit/2019/01/12/My-New-Post/"/>
-    <id>https://yzlit.github.io/yzlit/2019/01/12/My-New-Post/</id>
+    <link href="https://yzlit.github.io/2019/01/12/My-New-Post/"/>
+    <id>https://yzlit.github.io/2019/01/12/My-New-Post/</id>
     <published>2019-01-12T05:30:57.000Z</published>
     <updated>2019-01-12T06:32:42.986Z</updated>
     
@@ -28,14 +28,14 @@
     </summary>
     
     
-      <category term="测试" scheme="https://yzlit.github.io/yzlit/tags/%E6%B5%8B%E8%AF%95/"/>
+      <category term="测试" scheme="https://yzlit.github.io/tags/%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="https://yzlit.github.io/yzlit/2019/01/12/hello-world/"/>
-    <id>https://yzlit.github.io/yzlit/2019/01/12/hello-world/</id>
+    <link href="https://yzlit.github.io/2019/01/12/hello-world/"/>
+    <id>https://yzlit.github.io/2019/01/12/hello-world/</id>
     <published>2019-01-12T05:23:40.717Z</published>
     <updated>2019-01-12T05:23:40.718Z</updated>
     
