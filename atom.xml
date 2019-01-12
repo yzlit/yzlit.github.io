@@ -3,7 +3,7 @@
   <title>酒夜狸个人博客</title>
   
   <subtitle>酒夜狸的个人博客，欢迎探讨有关java,python,go,linux后台技术，诗歌，科幻，人生。</subtitle>
-  <link href="/yzlit.github.io/atom.xml" rel="self"/>
+  <link href="yzlit.github.io/atom.xml" rel="self"/>
   
   <link href="https://yzlit.github.io/"/>
   <updated>2019-01-12T06:32:42.986Z</updated>
