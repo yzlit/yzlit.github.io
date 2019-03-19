@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yzlit.github.io/"/>
-  <updated>2019-01-25T17:20:41.294Z</updated>
+  <updated>2019-02-23T08:32:46.656Z</updated>
   <id>https://yzlit.github.io/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="https://yzlit.github.io/2019/01/26/%E5%AF%B9%E6%96%87%E9%9D%A9%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/"/>
-    <id>https://yzlit.github.io/2019/01/26/对文革的一些思考/</id>
-    <published>2019-01-25T16:47:03.056Z</published>
-    <updated>2019-01-25T17:20:41.294Z</updated>
-    
-    <content type="html"><![CDATA[<p>文化大革命全称“无产阶级文化大革命”，是一场由毛泽东发动，被反革命集团利用，给党、国家和各族人民带来严重灾难的内乱。 </p><p>1966年5月至1976年10月的“文化大革命”，使党、国家和人民遭到建国以来最严重的挫折和损失。 </p><p>首先，我是以客观讨论的态度来认识这一场人类浩劫，并不想直接下定论式的给出结论。</p><p>文化大革命不是一个人的错，是很多人的错。很多人指谁，毛主席估计得负错误指导的责任，毛主席没有直接指导，直接下手的是谁，从下而下，从“四人帮”到文革小组，到各个军管，再到基层的反革命斗争小组，再到遍布全国的红卫兵，很难说清楚，到底有多少人错了。</p><p>中国人民像一群羊，他们在挣脱了封建资本官僚主义这个大枷锁后，对着这一片人类未曾涉足的荒野，一位如火炬般明亮的伟人告诉，去吧，先去打破一切体制，于是人们欢欣鼓舞得转身跑进丛林荒野中，而在他们后面驱使的并不是牧羊犬，而是好多狼。</p><p>急着打破所有旧制度，全盘否定所有存在过的旧制度，却发现脚下的地突然虚无。</p><p>我在想，毛主席说有反革命，后来却发现真的有反革命，毛主席说得没错，只不过反革命“四人帮”却是他的妻子，他信赖的政治家，战友。有人说，毛主席不是不知道四人帮坏，而是急着先扳倒他认为的修正主义，想靠着他们掀起一场他真正信赖的人民的革命浪潮。我一直认为，把所有罪过都赖在四人帮身上，真的太高估他们了，人民有了思想指导，但是真的可以有那么多人民可以在一场又一场运动就明白他们所要背负的政治任务吗，不不不，人民一直都是现实，绝大部分人民不关心什么理想政治制度，他们关心的是理想社会制度。又有人说了，政治不是必要的，但政治是每个人的副业。但是可想而知，最必要的经济基础，法治制度在那个社会环境都十分脆弱，妄想一步登天，实现社会主义，实在超前。</p><p>任何人，任何事，脱离当时社会环境讲都不能认为是客观的。当然，文革也是，毛主席也是，当时的环境是怎么样的，国外，苏联修正，美帝和国名党蠢蠢欲动，各种社会主义思潮涌动。国内，几起重大反革命事件，人民建设社会主义激情滂湃。所以，看下来，好像，文革的发生并不是那么难以理解。</p><p>但是，问一个问题，文革有发动的必要吗？</p><p>我很难回答。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;文化大革命全称“无产阶级文化大革命”，是一场由毛泽东发动，被反革命集团利用，给党、国家和各族人民带来严重灾难的内乱。 &lt;/p&gt;
-&lt;p&gt;1966年5月至1976年10月的“文化大革命”，使党、国家和人民遭到建国以来最严重的挫折和损失。 &lt;/p&gt;
-&lt;p&gt;首先，我是以客观讨论的态
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>千万流量RPC架构长啥样</title>
@@ -83,15 +60,15 @@
     <link href="https://yzlit.github.io/2019/01/13/redis%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
     <id>https://yzlit.github.io/2019/01/13/redis使用笔记/</id>
     <published>2019-01-13T04:23:55.000Z</published>
-    <updated>2019-03-03T03:07:46.502Z</updated>
+    <updated>2019-03-19T09:03:52.606Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="I-Redis持久化的方式有两种："><a href="#I-Redis持久化的方式有两种：" class="headerlink" title="I Redis持久化的方式有两种："></a>I Redis持久化的方式有两种：</h1><p>​    1.RDB:对内存中数据库状态进行快照<br>​    2.AOF:把每条写命令都写入文件，类似于mysql的binlog日志<br>​    </p><h2 id="一、-RDB方式："><a href="#一、-RDB方式：" class="headerlink" title="一、 RDB方式："></a>一、 RDB方式：</h2><p>将Redis在内存中的数据库状态保存到磁盘里面，RDB文件是一个经过</p><p>压缩的二进制文件，通过该文件可以还原生成RDB文件的数据状态。<br>  RDB的生成方式：</p><h3 id="1-指向命令手动生成"><a href="#1-指向命令手动生成" class="headerlink" title="1.指向命令手动生成"></a>1.指向命令手动生成</h3><p>​    有两个Redis命令可以生成RDB文件，一个是SAVE，另一个是BGSAVE，SAVE </p><p>命令会阻塞Redis服务器进程，知道RDB文件创建完毕为止，在服务器阻塞期间,服</p><p>务器不能处理任何的进程,BGSAVE会派出一个子进程，然后由子进程负责创建RDB</p><p>文件，服务器进程（父进程）继续处理命令请求，创建RDB文件结束之前，客户端</p><p>发送的 BGSAVE 和 SAVE 命令会被服务器拒绝</p><h3 id="2-通过配置自动生成"><a href="#2-通过配置自动生成" class="headerlink" title="2.通过配置自动生成"></a>2.通过配置自动生成</h3><p>​    可以设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令，可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足就会执行BGSAGE命令<br>​    列如：<br>​    save 900 1<br>​    save 300 10<br>​    save 60  10000<br>​    那么只要满足以下三个条件中的其中一个，BGSAVE命令就会被执行<br>​    服务器在 900 秒之内，对数据库进行了 1 次修改<br>​    服务器在 300 秒之内，对数据库进行了 10 次修改<br>​    服务器在 900 秒之内，对数据库进行了 10000 次修改</p><h2 id="二，AOF方式："><a href="#二，AOF方式：" class="headerlink" title="二，AOF方式："></a>二，AOF方式：</h2><p>是通过保存Redis服务器所执行的写命令来记录数据库状态的AOF文件刷新方式，有三种：<br>    1.appendfsync always –每提交一个修改命令都调用fsync到AOF文件，非常慢，但是很安全；<br>    2.appendfsync everysec–每秒都调用fsyns刷新到AOF文件，很快但可能丢失一秒内的数据；<br>    3.appendfsync no–依靠OS进行刷新，redis不主动刷新AOF，这样最快但是安全性差；<br>    默认并且推荐每秒刷新，这样在速度和安全上都做到了兼顾<br>    配置如下<br>    appendonly yes #启用AOF<br>    appendfilename appendonly.aof #AOF文件的名称</p><pre><code># appendfsync alwaysappendfsync everysec #每秒钟强制写入磁盘一次# appendfsync no  </code></pre><h1 id="II-数据恢复"><a href="#II-数据恢复" class="headerlink" title="II 数据恢复"></a>II 数据恢复</h1><h2 id="1-ROB方式"><a href="#1-ROB方式" class="headerlink" title="1.ROB方式"></a>1.ROB方式</h2><p>​    ROB文件的载入工作是在服务器启动时自动执行的，没有专门用于载入ROB文件命令，只要Redis服务器再启动时检测到ROB文件存在，它就会自动载入ROB的文件，在服务器载入的期间，会一直处于阻塞状态，知道载入工作完成为止</p><h2 id="2-AOF方式"><a href="#2-AOF方式" class="headerlink" title="2.AOF方式"></a>2.AOF方式</h2><p>​    服务器在启动时，通过载入和执行AOF文件中保存的命令来还原服务器关闭之前的数据，具体库状态过程：<br>​        载入AOF文件<br>​        创建模拟客户端<br>​        从AOF文件中读取一条命令<br>​        使用模拟客户端执行命令<br>​        循环读取并执行命令，知道全部完成</p><p>   注意：如果同时启动了AOF和ROB方式，AOF优先，启动时只加载AOF文件恢复数时之加载</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="I-Redis持久化的方式有两种："><a href="#I-Redis持久化的方式有两种：" class="headerlink" title="I Redis持久化的方式有两种："></a>I Redis持久化的方式有两种：</h3><p>​    1.RDB:对内存中数据库状态进行快照<br>​    2.AOF:把每条写命令都写入文件，类似于mysql的binlog日志<br>​    </p><h4 id="一、-RDB方式："><a href="#一、-RDB方式：" class="headerlink" title="一、 RDB方式："></a>一、 RDB方式：</h4><p>将Redis在内存中的数据库状态保存到磁盘里面，RDB文件是一个经过</p><p>压缩的二进制文件，通过该文件可以还原生成RDB文件的数据状态。<br>  RDB的生成方式：</p><h5 id="1-指向命令手动生成"><a href="#1-指向命令手动生成" class="headerlink" title="1.指向命令手动生成"></a>1.指向命令手动生成</h5><p>​    有两个Redis命令可以生成RDB文件，一个是SAVE，另一个是BGSAVE，SAVE </p><p>命令会阻塞Redis服务器进程，知道RDB文件创建完毕为止，在服务器阻塞期间,服</p><p>务器不能处理任何的进程,BGSAVE会派出一个子进程，然后由子进程负责创建RDB</p><p>文件，服务器进程（父进程）继续处理命令请求，创建RDB文件结束之前，客户端</p><p>发送的 BGSAVE 和 SAVE 命令会被服务器拒绝</p><h5 id="2-通过配置自动生成"><a href="#2-通过配置自动生成" class="headerlink" title="2.通过配置自动生成"></a>2.通过配置自动生成</h5><p>​    可以设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令，可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足就会执行BGSAGE命令<br>​    列如：<br>​    save 900 1<br>​    save 300 10<br>​    save 60  10000<br>​    那么只要满足以下三个条件中的其中一个，BGSAVE命令就会被执行<br>​    服务器在 900 秒之内，对数据库进行了 1 次修改<br>​    服务器在 300 秒之内，对数据库进行了 10 次修改<br>​    服务器在 900 秒之内，对数据库进行了 10000 次修改</p><h4 id="二，AOF方式："><a href="#二，AOF方式：" class="headerlink" title="二，AOF方式："></a>二，AOF方式：</h4><p>是通过保存Redis服务器所执行的写命令来记录数据库状态的AOF文件刷新方式，有三种：<br>    1.appendfsync always –每提交一个修改命令都调用fsync到AOF文件，非常慢，但是很安全；<br>    2.appendfsync everysec–每秒都调用fsyns刷新到AOF文件，很快但可能丢失一秒内的数据；<br>    3.appendfsync no–依靠OS进行刷新，redis不主动刷新AOF，这样最快但是安全性差；<br>    默认并且推荐每秒刷新，这样在速度和安全上都做到了兼顾<br>    配置如下<br>    appendonly yes #启用AOF<br>    appendfilename appendonly.aof #AOF文件的名称</p><pre><code># appendfsync alwaysappendfsync everysec #每秒钟强制写入磁盘一次# appendfsync no  </code></pre><h3 id="II-数据恢复"><a href="#II-数据恢复" class="headerlink" title="II 数据恢复"></a>II 数据恢复</h3><h4 id="1-ROB方式"><a href="#1-ROB方式" class="headerlink" title="1.ROB方式"></a>1.ROB方式</h4><p>​    ROB文件的载入工作是在服务器启动时自动执行的，没有专门用于载入ROB文件命令，只要Redis服务器再启动时检测到ROB文件存在，它就会自动载入ROB的文件，在服务器载入的期间，会一直处于阻塞状态，知道载入工作完成为止</p><h4 id="2-AOF方式"><a href="#2-AOF方式" class="headerlink" title="2.AOF方式"></a>2.AOF方式</h4><p>​    服务器在启动时，通过载入和执行AOF文件中保存的命令来还原服务器关闭之前的数据，具体库状态过程：<br>​        载入AOF文件<br>​        创建模拟客户端<br>​        从AOF文件中读取一条命令<br>​        使用模拟客户端执行命令<br>​        循环读取并执行命令，知道全部完成</p><p>   注意：如果同时启动了AOF和ROB方式，AOF优先，启动时只加载AOF文件恢复数时之加载</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;I-Redis持久化的方式有两种：&quot;&gt;&lt;a href=&quot;#I-Redis持久化的方式有两种：&quot; class=&quot;headerlink&quot; title=&quot;I Redis持久化的方式有两种：&quot;&gt;&lt;/a&gt;I Redis持久化的方式有两种：&lt;/h1&gt;&lt;p&gt;​    1.RDB
+        &lt;h3 id=&quot;I-Redis持久化的方式有两种：&quot;&gt;&lt;a href=&quot;#I-Redis持久化的方式有两种：&quot; class=&quot;headerlink&quot; title=&quot;I Redis持久化的方式有两种：&quot;&gt;&lt;/a&gt;I Redis持久化的方式有两种：&lt;/h3&gt;&lt;p&gt;​    1.RDB
       
     
     </summary>
