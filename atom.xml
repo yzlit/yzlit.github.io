@@ -5,9 +5,9 @@
   <subtitle>酒夜狸的个人博客，欢迎探讨有关编程，诗歌，科幻，人生。</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://yzlit.github.io/"/>
-  <updated>2019-02-23T08:32:46.656Z</updated>
-  <id>https://yzlit.github.io/</id>
+  <link href="http://yzlit.gitee.io/"/>
+  <updated>2019-10-18T13:00:56.817Z</updated>
+  <id>http://yzlit.gitee.io/</id>
   
   <author>
     <name>酒夜狸</name>
@@ -18,22 +18,31 @@
   
   <entry>
     <title>千万流量RPC架构长啥样</title>
-    <link href="https://yzlit.github.io/2019/01/19/%E5%8D%83%E4%B8%87%E6%B5%81%E9%87%8FRPC%E6%9E%B6%E6%9E%84%E9%95%BF%E5%95%A5%E6%A0%B7/"/>
-    <id>https://yzlit.github.io/2019/01/19/千万流量RPC架构长啥样/</id>
+    <link href="http://yzlit.gitee.io/2019/01/19/%E5%8D%83%E4%B8%87%E6%B5%81%E9%87%8FRPC%E6%9E%B6%E6%9E%84%E9%95%BF%E5%95%A5%E6%A0%B7/"/>
+    <id>http://yzlit.gitee.io/2019/01/19/千万流量RPC架构长啥样/</id>
     <published>2019-01-19T12:52:41.000Z</published>
-    <updated>2019-02-23T08:32:46.656Z</updated>
+    <updated>2019-10-18T13:00:56.817Z</updated>
+    
+    <content type="html"><![CDATA[<p>先举个例子感受一下千万级到底是什么数量级？现在很流行的优步(Uber)，从媒体公布的信息看，它每天接单量平均在百万左右， 假如每天有10个小时的服务时间，平均QPS只有30左右。对于一个后台服务器，单机的平均QPS可以到达800-1000，单独看写的业务量很简单 。为什么我们又不能说轻视它？第一，我们看它的数据存储，每天一百万的话，一年数据量的规模是多少？其次，刚才说的订单量，每一个订单要推送给附近的司机、司机要并<br>发抢单，后面业务场景的访问量往往是前者的上百倍，轻松就超过上亿级别了。</p><p>今天我想从架构的本质谈起之后，希望大家理解在做一些建构设计的时候，它的出发点以及它解决的问题是什么。</p><p>架构，刚开始的解释是我从知乎上看到的。什么是架构？有人讲， 说架构并不是一 个很 悬 乎的 东西 ， 实际 上就是一个架子 ， 放一些 业务 和算法，跟我们的生活中的晾衣架很像。更抽象一点，说架构其 实 是 对 我 们 重复性业务 的抽象和我 们 未来 业务 拓展的前瞻，强调过去的经验和你对整个行业的预见。</p><p>我们要想做一个架构的话需要哪些能力？我觉得最重要的是架构师一个最重要的能力就是你要有 战 略分解能力。这个怎么来看呢:</p><p>第一，你必须要有抽象的能力，抽象的能力最基本就是去重，去重在整个架构中体现在方方面面，从定义一个函数，到定义一个类，到提供的一个服务，以及模板，背后都是要去重提高可复用率。<br>第二， 分类能力。做软件需要做对象的解耦，要定义对象的属性和方法，做分布式系统的时候要做服务的拆分和模块化，要定义服务的接口和规范。<br>第三， 算法（性能），它的价值体现在提升系统的性能，所有性能的提升，最终都会落到CPU，内存，IO和网络这4大块上。</p><p><img src="pic\510-20151215135442334-1883091089.png" alt=""></p><p>这一页PPT举了一些例子来更深入的理解常见技术背后的架构理念。</p><ul><li>第一个例子，在分布式系统我们会做 MySQL分 库 分表，我们要从不同的库和表中读取数据，这样的抽象最直观就是使用模板，因为绝大多数SQL语义是相同的，除了路由到哪个库哪个表，如果不使用Proxy中间件，模板就是性价比最高的方法。</li><li>第二看一下加速网络的CDN，它是做速度方面的性能提升，刚才我们也提到从CPU、内存、IO、网络四个方面来考虑，CDN本质上一个是做网络智能调度优化，另一个是多级缓存优化。</li><li>第三个看一下服务化，刚才已经提到了，各个大网站转型过程中一定会做服务化，其实它就是做抽象和做服务的拆分。第四个看一下消息队列，本质上还是做分类，只不过不是两个边际清晰的类，而是把两个边际不清晰的子系统通过队列解构并且异步化。</li></ul><p><img src="pic\510-20151215135443177-443645586.png" alt=""></p><p><strong>新浪微博整体架构是什么样的</strong></p><p>接下我们看一下微博整体架构，到一定量级的系统整个架构都会变成三层，客户端包括WEB、安卓和IOS，这里就不说了。<br>接着还都会有一个接口层， 有三个主要作用：</p><ul><li>第一个作用，要做 安全隔离，因为前端节点都是直接和用户交互，需要防范各种恶意攻击；</li><li>第二个还充当着一个 流量控制的作用，大家知道，在2014年春节的时候，微信红包，每分钟8亿多次的请求，其实真正到它后台的请求量，只有十万左右的数量级（这里的数据可能不准），剩余的流量在接口层就被挡住了；</li><li>第三，我们看对 PC 端和移 动 端的需求不一样的，所以我们可以进行拆分。接口层之后是后台，可以看到微博后台有三大块：</li><li>一个是 平台服 务，</li><li>第二， 搜索，</li><li>第三， 大数据。<br>到了后台的各种服务其实都是处理的数据。 像平台的业务部门，做的就是 数据存储和读 取，对搜索来说做的是 数据的 检 索，对大数据来说是做的数据的 挖掘。微博其实和淘宝是很类似</li></ul><p><img src="pic\510-20151215135444271-98073581.png" alt=""></p><p>微博其实和淘宝是很类似的。一般来说，第一代架构，基本上能支撑到用户到 百万 级别，到第二代架构基本能支撑到 千万 级别都没什么问题，当业务规模到 亿级别时，需要第三代的架构。</p><p>从 LAMP 的架构到面向服 务 的架构，有几个地方是非常难的，首先不可能在第一代基础上通过简单的修修补补满足用户量快速增长的，同时线上业务又不能停， 这是我们常说的 在 飞 机上 换 引擎的 问题。前两天我有一个朋友问我，说他在内部推行服务化的时候，把一个模块服务化做完了，其他部门就是不接。我建议在做服务化的时候，首先更多是偏向业务的梳理，同时要找准一个很好的切入点，既有架构和服务化上的提升，业务方也要有收益，比如提升性能或者降低维护成本同时升级过程要平滑，建议开始从原子化服务切入，比如基础的用户服务， 基础的短消息服务，基础的推送服务。 第二，就是可 以做无状 态 服 务，后面会详细讲，还有数据量大了后需要做数据Sharding，后面会将。 第三代 架构 要解决的 问题，就是用户量和业务趋于稳步增加（相对爆发期的指数级增长），更多考虑技术框架的稳定性， 提升系统整体的性能，降低成本，还有对整个系统监控的完善和升级。</p><p><strong>大型网站的系统架构是如何演变的</strong></p><p>我们通过通过数据看一下它的挑战，PV是在10亿级别，QPS在百万，数据量在千亿级别。我们可用性，就是SLA要求4个9，接口响应最多不能超过150毫秒，线上所有的故障必须得在5分钟内解决完。如果说5分钟没处理呢？那会影响你年终的绩效考核。2015年微博DAU已经过亿。我们系统有上百个微服务，每周会有两次的常规上线和不限次数的紧急上线。我们的挑战都一样，就是数据量，bigger and bigger，用户体验是faster and faster，业务是more and more。互联网业务更多是产品体验驱动， 技 术 在 产 品 体验上最有效的贡献 ， 就是你的性能 越来越好 。 每次降低加载一个页面的时间，都可以间接的降低这个页面上用户的流失率。</p><p><img src="pic\510-20151215135447349-1250900543.png" alt=""></p><p><strong>微博的技术挑战和正交分解法解析架构</strong></p><p>下面看一下 第三代的 架构 图 以及 我 们 怎么用正交分解法 阐 述。 我们可以看到我们从两个维度，横轴和纵轴可以看到。 一个 维 度 是 水平的 分层 拆分，第二从垂直的维度会做拆分。水平的维度从接口层、到服务层到数据存储层。垂直怎么拆分，会用业务架构、技术架构、监控平台、服务治理等等来处理。我相信到第二代的时候很多架构已<br>经有了业务架构和技术架构的拆分。我们看一下， 接口层有feed、用户关系、通讯接口；服务层，SOA里有基层服务、原子服务和组合服务，在微博我们只有原子服务和组合服务。原子服务不依赖于任何其他服务，组合服务由几个原子服务和自己的业务逻辑构建而成 ，资源层负责海量数据的存储（后面例子会详细讲）。技 术框架解决 独立于 业务 的海量高并发场景下的技术难题，由众多的技术组件共同构建而成 。在接口层，微博使用JERSY框架，帮助你做参数的解析，参数的验证，序列化和反序列化；资源层，主要是缓存、DB相关的各类组件，比如Cache组件和对象库组件。监 控平台和服 务 治理 ， 完成系统服务的像素级监控，对分布式系统做提前诊断、预警以及治理。包含了SLA规则的制定、服务监控、服务调用链监控、流量监控、错误异常监控、线上灰度发布上线系统、线上扩容缩容调度系统等。</p><p><img src="pic\510-20151215135448334-1468907707.png" alt=""></p>]]></content>
     
     <summary type="html">
     
+      
+      
+        &lt;p&gt;先举个例子感受一下千万级到底是什么数量级？现在很流行的优步(Uber)，从媒体公布的信息看，它每天接单量平均在百万左右， 假如每天有10个小时的服务时间，平均QPS只有30左右。对于一个后台服务器，单机的平均QPS可以到达800-1000，单独看写的业务量很简单 。为什么我
+      
+    
     </summary>
     
+    
+      <category term="RPC 高并发" scheme="http://yzlit.gitee.io/tags/RPC-%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>Java后台开发的修仙之路</title>
-    <link href="https://yzlit.github.io/2019/01/13/%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E4%BF%AE%E4%BB%99%E4%B9%8B%E8%B7%AF/"/>
-    <id>https://yzlit.github.io/2019/01/13/后台开发的修仙之路/</id>
+    <link href="http://yzlit.gitee.io/2019/01/13/%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E4%BF%AE%E4%BB%99%E4%B9%8B%E8%B7%AF/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/后台开发的修仙之路/</id>
     <published>2019-01-13T15:59:37.000Z</published>
     <updated>2019-10-17T14:25:17.227Z</updated>
     
@@ -51,14 +60,14 @@
     </summary>
     
     
-      <category term="后台开发,Java" scheme="https://yzlit.github.io/tags/%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91-Java/"/>
+      <category term="后台开发,Java" scheme="http://yzlit.gitee.io/tags/%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91-Java/"/>
     
   </entry>
   
   <entry>
     <title>Redis使用笔记</title>
-    <link href="https://yzlit.github.io/2019/01/13/redis%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
-    <id>https://yzlit.github.io/2019/01/13/redis使用笔记/</id>
+    <link href="http://yzlit.gitee.io/2019/01/13/redis%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/redis使用笔记/</id>
     <published>2019-01-13T04:23:55.000Z</published>
     <updated>2019-03-19T09:03:52.606Z</updated>
     
@@ -74,14 +83,14 @@
     </summary>
     
     
-      <category term="Redis" scheme="https://yzlit.github.io/tags/Redis/"/>
+      <category term="Redis" scheme="http://yzlit.gitee.io/tags/Redis/"/>
     
   </entry>
   
   <entry>
     <title>数据库ACID特性和事务</title>
-    <link href="https://yzlit.github.io/2019/01/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7%E5%8F%8A%E4%BA%8B%E5%8A%A1/"/>
-    <id>https://yzlit.github.io/2019/01/13/数据库四大特性及事务/</id>
+    <link href="http://yzlit.gitee.io/2019/01/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7%E5%8F%8A%E4%BA%8B%E5%8A%A1/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/数据库四大特性及事务/</id>
     <published>2019-01-13T04:23:55.000Z</published>
     <updated>2019-03-14T13:47:39.586Z</updated>
     
@@ -98,14 +107,14 @@
     </summary>
     
     
-      <category term="跨域访问" scheme="https://yzlit.github.io/tags/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE/"/>
+      <category term="跨域访问" scheme="http://yzlit.gitee.io/tags/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE/"/>
     
   </entry>
   
   <entry>
     <title>跨域问题详解</title>
-    <link href="https://yzlit.github.io/2019/01/13/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
-    <id>https://yzlit.github.io/2019/01/13/跨域问题/</id>
+    <link href="http://yzlit.gitee.io/2019/01/13/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/跨域问题/</id>
     <published>2019-01-13T04:23:55.000Z</published>
     <updated>2019-01-13T11:09:27.913Z</updated>
     
@@ -121,14 +130,14 @@
     </summary>
     
     
-      <category term="跨域访问" scheme="https://yzlit.github.io/tags/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE/"/>
+      <category term="跨域访问" scheme="http://yzlit.gitee.io/tags/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE/"/>
     
   </entry>
   
   <entry>
     <title>工作之后如何处理好工作和学习的平衡</title>
-    <link href="https://yzlit.github.io/2019/01/13/%E8%B0%88%E8%B0%88%E5%B7%A5%E4%BD%9C%E6%80%8E%E4%B9%88%E6%8F%90%E5%8D%87%E8%87%AA%E5%B7%B1%E7%9A%84%E8%AE%A1%E5%88%92/"/>
-    <id>https://yzlit.github.io/2019/01/13/谈谈工作怎么提升自己的计划/</id>
+    <link href="http://yzlit.gitee.io/2019/01/13/%E8%B0%88%E8%B0%88%E5%B7%A5%E4%BD%9C%E6%80%8E%E4%B9%88%E6%8F%90%E5%8D%87%E8%87%AA%E5%B7%B1%E7%9A%84%E8%AE%A1%E5%88%92/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/谈谈工作怎么提升自己的计划/</id>
     <published>2019-01-13T04:23:55.000Z</published>
     <updated>2019-10-17T15:31:08.973Z</updated>
     
@@ -145,14 +154,14 @@
     </summary>
     
     
-      <category term="工作 学习" scheme="https://yzlit.github.io/tags/%E5%B7%A5%E4%BD%9C-%E5%AD%A6%E4%B9%A0/"/>
+      <category term="工作 学习" scheme="http://yzlit.gitee.io/tags/%E5%B7%A5%E4%BD%9C-%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
   <entry>
     <title>mysql有关索引的一些总结</title>
-    <link href="https://yzlit.github.io/2019/01/12/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/"/>
-    <id>https://yzlit.github.io/2019/01/12/mysql索引的一些总结/</id>
+    <link href="http://yzlit.gitee.io/2019/01/12/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/"/>
+    <id>http://yzlit.gitee.io/2019/01/12/mysql索引的一些总结/</id>
     <published>2019-01-12T15:46:47.000Z</published>
     <updated>2019-03-14T14:49:13.296Z</updated>
     
@@ -171,16 +180,16 @@
     </summary>
     
     
-      <category term="索引" scheme="https://yzlit.github.io/tags/%E7%B4%A2%E5%BC%95/"/>
+      <category term="索引" scheme="http://yzlit.gitee.io/tags/%E7%B4%A2%E5%BC%95/"/>
     
-      <category term="mysql" scheme="https://yzlit.github.io/tags/mysql/"/>
+      <category term="mysql" scheme="http://yzlit.gitee.io/tags/mysql/"/>
     
   </entry>
   
   <entry>
     <title>从服务端来讲讲限流的思路</title>
-    <link href="https://yzlit.github.io/2019/01/12/%E4%BB%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9D%A5%E8%AE%B2%E8%AE%B2%E9%99%90%E6%B5%81%E7%9A%84%E6%80%9D%E8%B7%AF/"/>
-    <id>https://yzlit.github.io/2019/01/12/从服务端来讲讲限流的思路/</id>
+    <link href="http://yzlit.gitee.io/2019/01/12/%E4%BB%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9D%A5%E8%AE%B2%E8%AE%B2%E9%99%90%E6%B5%81%E7%9A%84%E6%80%9D%E8%B7%AF/"/>
+    <id>http://yzlit.gitee.io/2019/01/12/从服务端来讲讲限流的思路/</id>
     <published>2019-01-12T15:46:47.000Z</published>
     <updated>2019-01-15T04:29:46.786Z</updated>
     
@@ -196,15 +205,15 @@
     </summary>
     
     
-      <category term="限流" scheme="https://yzlit.github.io/tags/%E9%99%90%E6%B5%81/"/>
+      <category term="限流" scheme="http://yzlit.gitee.io/tags/%E9%99%90%E6%B5%81/"/>
     
-      <category term="固定窗口" scheme="https://yzlit.github.io/tags/%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3/"/>
+      <category term="固定窗口" scheme="http://yzlit.gitee.io/tags/%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3/"/>
     
-      <category term="滑动窗口" scheme="https://yzlit.github.io/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/"/>
+      <category term="滑动窗口" scheme="http://yzlit.gitee.io/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/"/>
     
-      <category term="漏桶" scheme="https://yzlit.github.io/tags/%E6%BC%8F%E6%A1%B6/"/>
+      <category term="漏桶" scheme="http://yzlit.gitee.io/tags/%E6%BC%8F%E6%A1%B6/"/>
     
-      <category term="令牌桶" scheme="https://yzlit.github.io/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/"/>
+      <category term="令牌桶" scheme="http://yzlit.gitee.io/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/"/>
     
   </entry>
   
