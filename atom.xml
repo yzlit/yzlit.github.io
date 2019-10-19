@@ -65,26 +65,25 @@
   </entry>
   
   <entry>
-    <title>工作之后如何处理好工作和学习的平衡</title>
-    <link href="http://yzlit.gitee.io/2019/01/13/%E8%B0%88%E8%B0%88%E5%B7%A5%E4%BD%9C%E6%80%8E%E4%B9%88%E6%8F%90%E5%8D%87%E8%87%AA%E5%B7%B1%E7%9A%84%E8%AE%A1%E5%88%92/"/>
-    <id>http://yzlit.gitee.io/2019/01/13/谈谈工作怎么提升自己的计划/</id>
+    <title>Redis使用笔记</title>
+    <link href="http://yzlit.gitee.io/2019/01/13/redis%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/redis使用笔记/</id>
     <published>2019-01-13T04:23:55.000Z</published>
-    <updated>2019-10-17T15:31:08.973Z</updated>
+    <updated>2019-03-19T09:03:52.606Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一，工作"><a href="#一，工作" class="headerlink" title="一，工作"></a>一，工作</h5><p>首先最重要肯定是饭碗，对于大多数人来说，先维持一份薪水还过得去的工作，才能有力气去继续奔跑。</p><p>工作当然是枯燥的，CRUD的工作对于很多初级后台开发来说是常事，但是工作仍要做好，做出彩，如果你连工作最基本的都不肯做好，那么你又怎么可能去做好别的事，没有基本的工作，兴趣更是无从谈起。  </p><p>要做好工作 ，做出彩，也是要下很大努力的。</p><p>第一个就是要注意改进工作方法，提高工作效率。别因为自己的做事方法而耽误自己的时间，那是最蠢的。</p><p>工作方法首先是一句话，规划好工作量和工作计划，小步快跑。</p><p>规划很重要，不然你不知不觉浪费的时间，就是在慢慢把你拉进水里。</p><p>第二句话，懂得职场的规矩，每个公司都有不同的职场氛围，没有一模一样的处事方法，但是为人却是差不多，与人相处，要有诚意，也要保持礼貌，既要尽责地完成自己的工作，在不影响自己的工作和时间情况下，尽量给予帮助。</p><p>二，学习</p><p>工作了就不学习，过几个月你已经落后你的同学了，再过个一两年，公司把你炒了，你也找不到下家了。</p><p>学习，很重要，也要有规划，不能东学一个ES，西学一个微服务，三天打鱼式地刷几道leetcode。</p><p>要有规划，首先要计划时间，下班后从几点开始到睡觉前，要干什么，要学什么，进度怎么控制，怎么把学到的东西用起来，记下来。</p><p>生活和学习应该放在一起考虑，学习生活才是一种好的状态。</p><p>不荒废时光，学一些东西不在于你学了就行，而在于它能最大化提升你的价值，把你的时间花值了。</p><p>前路漫漫，坚持，方得始终。</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="I-Redis持久化的方式有两种："><a href="#I-Redis持久化的方式有两种：" class="headerlink" title="I Redis持久化的方式有两种："></a>I Redis持久化的方式有两种：</h3><p>​    1.RDB:对内存中数据库状态进行快照<br>​    2.AOF:把每条写命令都写入文件，类似于mysql的binlog日志<br>​    </p><h4 id="一、-RDB方式："><a href="#一、-RDB方式：" class="headerlink" title="一、 RDB方式："></a>一、 RDB方式：</h4><p>将Redis在内存中的数据库状态保存到磁盘里面，RDB文件是一个经过</p><p>压缩的二进制文件，通过该文件可以还原生成RDB文件的数据状态。<br>  RDB的生成方式：</p><h5 id="1-指向命令手动生成"><a href="#1-指向命令手动生成" class="headerlink" title="1.指向命令手动生成"></a>1.指向命令手动生成</h5><p>​    有两个Redis命令可以生成RDB文件，一个是SAVE，另一个是BGSAVE，SAVE </p><p>命令会阻塞Redis服务器进程，知道RDB文件创建完毕为止，在服务器阻塞期间,服</p><p>务器不能处理任何的进程,BGSAVE会派出一个子进程，然后由子进程负责创建RDB</p><p>文件，服务器进程（父进程）继续处理命令请求，创建RDB文件结束之前，客户端</p><p>发送的 BGSAVE 和 SAVE 命令会被服务器拒绝</p><h5 id="2-通过配置自动生成"><a href="#2-通过配置自动生成" class="headerlink" title="2.通过配置自动生成"></a>2.通过配置自动生成</h5><p>​    可以设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令，可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足就会执行BGSAGE命令<br>​    列如：<br>​    save 900 1<br>​    save 300 10<br>​    save 60  10000<br>​    那么只要满足以下三个条件中的其中一个，BGSAVE命令就会被执行<br>​    服务器在 900 秒之内，对数据库进行了 1 次修改<br>​    服务器在 300 秒之内，对数据库进行了 10 次修改<br>​    服务器在 900 秒之内，对数据库进行了 10000 次修改</p><h4 id="二，AOF方式："><a href="#二，AOF方式：" class="headerlink" title="二，AOF方式："></a>二，AOF方式：</h4><p>是通过保存Redis服务器所执行的写命令来记录数据库状态的AOF文件刷新方式，有三种：<br>    1.appendfsync always –每提交一个修改命令都调用fsync到AOF文件，非常慢，但是很安全；<br>    2.appendfsync everysec–每秒都调用fsyns刷新到AOF文件，很快但可能丢失一秒内的数据；<br>    3.appendfsync no–依靠OS进行刷新，redis不主动刷新AOF，这样最快但是安全性差；<br>    默认并且推荐每秒刷新，这样在速度和安全上都做到了兼顾<br>    配置如下<br>    appendonly yes #启用AOF<br>    appendfilename appendonly.aof #AOF文件的名称</p><pre><code># appendfsync alwaysappendfsync everysec #每秒钟强制写入磁盘一次# appendfsync no  </code></pre><h3 id="II-数据恢复"><a href="#II-数据恢复" class="headerlink" title="II 数据恢复"></a>II 数据恢复</h3><h4 id="1-ROB方式"><a href="#1-ROB方式" class="headerlink" title="1.ROB方式"></a>1.ROB方式</h4><p>​    ROB文件的载入工作是在服务器启动时自动执行的，没有专门用于载入ROB文件命令，只要Redis服务器再启动时检测到ROB文件存在，它就会自动载入ROB的文件，在服务器载入的期间，会一直处于阻塞状态，知道载入工作完成为止</p><h4 id="2-AOF方式"><a href="#2-AOF方式" class="headerlink" title="2.AOF方式"></a>2.AOF方式</h4><p>​    服务器在启动时，通过载入和执行AOF文件中保存的命令来还原服务器关闭之前的数据，具体库状态过程：<br>​        载入AOF文件<br>​        创建模拟客户端<br>​        从AOF文件中读取一条命令<br>​        使用模拟客户端执行命令<br>​        循环读取并执行命令，知道全部完成</p><p>   注意：如果同时启动了AOF和ROB方式，AOF优先，启动时只加载AOF文件恢复数时之加载</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h5 id=&quot;一，工作&quot;&gt;&lt;a href=&quot;#一，工作&quot; class=&quot;headerlink&quot; title=&quot;一，工作&quot;&gt;&lt;/a&gt;一，工作&lt;/h5&gt;&lt;p&gt;首先最重要肯定是饭碗，对于大多数人来说，先维持一份薪水还过得去的工作，才能有力气去继续奔跑。&lt;/p&gt;
-&lt;p&gt;工作当然是枯燥的
+        &lt;h3 id=&quot;I-Redis持久化的方式有两种：&quot;&gt;&lt;a href=&quot;#I-Redis持久化的方式有两种：&quot; class=&quot;headerlink&quot; title=&quot;I Redis持久化的方式有两种：&quot;&gt;&lt;/a&gt;I Redis持久化的方式有两种：&lt;/h3&gt;&lt;p&gt;​    1.RDB
       
     
     </summary>
     
     
-      <category term="工作 学习" scheme="http://yzlit.gitee.io/tags/%E5%B7%A5%E4%BD%9C-%E5%AD%A6%E4%B9%A0/"/>
+      <category term="Redis" scheme="http://yzlit.gitee.io/tags/Redis/"/>
     
   </entry>
   
@@ -113,6 +112,30 @@
   </entry>
   
   <entry>
+    <title>工作之后如何处理好工作和学习的平衡</title>
+    <link href="http://yzlit.gitee.io/2019/01/13/%E8%B0%88%E8%B0%88%E5%B7%A5%E4%BD%9C%E6%80%8E%E4%B9%88%E6%8F%90%E5%8D%87%E8%87%AA%E5%B7%B1%E7%9A%84%E8%AE%A1%E5%88%92/"/>
+    <id>http://yzlit.gitee.io/2019/01/13/谈谈工作怎么提升自己的计划/</id>
+    <published>2019-01-13T04:23:55.000Z</published>
+    <updated>2019-10-17T15:31:08.973Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一，工作"><a href="#一，工作" class="headerlink" title="一，工作"></a>一，工作</h5><p>首先最重要肯定是饭碗，对于大多数人来说，先维持一份薪水还过得去的工作，才能有力气去继续奔跑。</p><p>工作当然是枯燥的，CRUD的工作对于很多初级后台开发来说是常事，但是工作仍要做好，做出彩，如果你连工作最基本的都不肯做好，那么你又怎么可能去做好别的事，没有基本的工作，兴趣更是无从谈起。  </p><p>要做好工作 ，做出彩，也是要下很大努力的。</p><p>第一个就是要注意改进工作方法，提高工作效率。别因为自己的做事方法而耽误自己的时间，那是最蠢的。</p><p>工作方法首先是一句话，规划好工作量和工作计划，小步快跑。</p><p>规划很重要，不然你不知不觉浪费的时间，就是在慢慢把你拉进水里。</p><p>第二句话，懂得职场的规矩，每个公司都有不同的职场氛围，没有一模一样的处事方法，但是为人却是差不多，与人相处，要有诚意，也要保持礼貌，既要尽责地完成自己的工作，在不影响自己的工作和时间情况下，尽量给予帮助。</p><p>二，学习</p><p>工作了就不学习，过几个月你已经落后你的同学了，再过个一两年，公司把你炒了，你也找不到下家了。</p><p>学习，很重要，也要有规划，不能东学一个ES，西学一个微服务，三天打鱼式地刷几道leetcode。</p><p>要有规划，首先要计划时间，下班后从几点开始到睡觉前，要干什么，要学什么，进度怎么控制，怎么把学到的东西用起来，记下来。</p><p>生活和学习应该放在一起考虑，学习生活才是一种好的状态。</p><p>不荒废时光，学一些东西不在于你学了就行，而在于它能最大化提升你的价值，把你的时间花值了。</p><p>前路漫漫，坚持，方得始终。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h5 id=&quot;一，工作&quot;&gt;&lt;a href=&quot;#一，工作&quot; class=&quot;headerlink&quot; title=&quot;一，工作&quot;&gt;&lt;/a&gt;一，工作&lt;/h5&gt;&lt;p&gt;首先最重要肯定是饭碗，对于大多数人来说，先维持一份薪水还过得去的工作，才能有力气去继续奔跑。&lt;/p&gt;
+&lt;p&gt;工作当然是枯燥的
+      
+    
+    </summary>
+    
+    
+      <category term="工作 学习" scheme="http://yzlit.gitee.io/tags/%E5%B7%A5%E4%BD%9C-%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>跨域问题详解</title>
     <link href="http://yzlit.gitee.io/2019/01/13/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
     <id>http://yzlit.gitee.io/2019/01/13/跨域问题/</id>
@@ -132,29 +155,6 @@
     
     
       <category term="跨域访问" scheme="http://yzlit.gitee.io/tags/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis使用笔记</title>
-    <link href="http://yzlit.gitee.io/2019/01/13/redis%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
-    <id>http://yzlit.gitee.io/2019/01/13/redis使用笔记/</id>
-    <published>2019-01-13T04:23:55.000Z</published>
-    <updated>2019-03-19T09:03:52.606Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="I-Redis持久化的方式有两种："><a href="#I-Redis持久化的方式有两种：" class="headerlink" title="I Redis持久化的方式有两种："></a>I Redis持久化的方式有两种：</h3><p>​    1.RDB:对内存中数据库状态进行快照<br>​    2.AOF:把每条写命令都写入文件，类似于mysql的binlog日志<br>​    </p><h4 id="一、-RDB方式："><a href="#一、-RDB方式：" class="headerlink" title="一、 RDB方式："></a>一、 RDB方式：</h4><p>将Redis在内存中的数据库状态保存到磁盘里面，RDB文件是一个经过</p><p>压缩的二进制文件，通过该文件可以还原生成RDB文件的数据状态。<br>  RDB的生成方式：</p><h5 id="1-指向命令手动生成"><a href="#1-指向命令手动生成" class="headerlink" title="1.指向命令手动生成"></a>1.指向命令手动生成</h5><p>​    有两个Redis命令可以生成RDB文件，一个是SAVE，另一个是BGSAVE，SAVE </p><p>命令会阻塞Redis服务器进程，知道RDB文件创建完毕为止，在服务器阻塞期间,服</p><p>务器不能处理任何的进程,BGSAVE会派出一个子进程，然后由子进程负责创建RDB</p><p>文件，服务器进程（父进程）继续处理命令请求，创建RDB文件结束之前，客户端</p><p>发送的 BGSAVE 和 SAVE 命令会被服务器拒绝</p><h5 id="2-通过配置自动生成"><a href="#2-通过配置自动生成" class="headerlink" title="2.通过配置自动生成"></a>2.通过配置自动生成</h5><p>​    可以设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令，可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足就会执行BGSAGE命令<br>​    列如：<br>​    save 900 1<br>​    save 300 10<br>​    save 60  10000<br>​    那么只要满足以下三个条件中的其中一个，BGSAVE命令就会被执行<br>​    服务器在 900 秒之内，对数据库进行了 1 次修改<br>​    服务器在 300 秒之内，对数据库进行了 10 次修改<br>​    服务器在 900 秒之内，对数据库进行了 10000 次修改</p><h4 id="二，AOF方式："><a href="#二，AOF方式：" class="headerlink" title="二，AOF方式："></a>二，AOF方式：</h4><p>是通过保存Redis服务器所执行的写命令来记录数据库状态的AOF文件刷新方式，有三种：<br>    1.appendfsync always –每提交一个修改命令都调用fsync到AOF文件，非常慢，但是很安全；<br>    2.appendfsync everysec–每秒都调用fsyns刷新到AOF文件，很快但可能丢失一秒内的数据；<br>    3.appendfsync no–依靠OS进行刷新，redis不主动刷新AOF，这样最快但是安全性差；<br>    默认并且推荐每秒刷新，这样在速度和安全上都做到了兼顾<br>    配置如下<br>    appendonly yes #启用AOF<br>    appendfilename appendonly.aof #AOF文件的名称</p><pre><code># appendfsync alwaysappendfsync everysec #每秒钟强制写入磁盘一次# appendfsync no  </code></pre><h3 id="II-数据恢复"><a href="#II-数据恢复" class="headerlink" title="II 数据恢复"></a>II 数据恢复</h3><h4 id="1-ROB方式"><a href="#1-ROB方式" class="headerlink" title="1.ROB方式"></a>1.ROB方式</h4><p>​    ROB文件的载入工作是在服务器启动时自动执行的，没有专门用于载入ROB文件命令，只要Redis服务器再启动时检测到ROB文件存在，它就会自动载入ROB的文件，在服务器载入的期间，会一直处于阻塞状态，知道载入工作完成为止</p><h4 id="2-AOF方式"><a href="#2-AOF方式" class="headerlink" title="2.AOF方式"></a>2.AOF方式</h4><p>​    服务器在启动时，通过载入和执行AOF文件中保存的命令来还原服务器关闭之前的数据，具体库状态过程：<br>​        载入AOF文件<br>​        创建模拟客户端<br>​        从AOF文件中读取一条命令<br>​        使用模拟客户端执行命令<br>​        循环读取并执行命令，知道全部完成</p><p>   注意：如果同时启动了AOF和ROB方式，AOF优先，启动时只加载AOF文件恢复数时之加载</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;I-Redis持久化的方式有两种：&quot;&gt;&lt;a href=&quot;#I-Redis持久化的方式有两种：&quot; class=&quot;headerlink&quot; title=&quot;I Redis持久化的方式有两种：&quot;&gt;&lt;/a&gt;I Redis持久化的方式有两种：&lt;/h3&gt;&lt;p&gt;​    1.RDB
-      
-    
-    </summary>
-    
-    
-      <category term="Redis" scheme="http://yzlit.gitee.io/tags/Redis/"/>
     
   </entry>
   
